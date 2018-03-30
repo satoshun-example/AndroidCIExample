@@ -20,6 +20,9 @@ allprojects {
         google()
         jcenter()
     }
+    configurations {
+        ktlint
+    }
 }
 
 task clean(type: Delete) {
