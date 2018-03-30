@@ -8,13 +8,9 @@ jobs:
     steps:
       - checkout
 
-      - run: gem update --system 2.4.8
-      - run: gem install bundler
-      - run: bundle install --path vendor/bundle
-      - run: bundle exec danger
-
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -22,11 +18,17 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
       - run:
           name: Run Tests
-          command: ./gradlew lint test
+          command: ./gradlew lint ktlintCheck test
       - store_artifacts:
           path: app/build/reports
           destination: reports
       - store_test_results:
           path: app/build/test-results
+
+      - run: gem update --system 2.4.8
+      - run: gem install bundler
+      - run: bundle install --path vendor/bundle
+      - run: bundle exec danger
