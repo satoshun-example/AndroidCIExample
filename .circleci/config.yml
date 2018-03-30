@@ -30,5 +30,11 @@ jobs:
 
       - run: gem update --system 2.4.8
       - run: gem install bundler
+      - restore_cache:
+          key: gems-{{ checksum "Gemfile.lock" }}
       - run: bundle install --path vendor/bundle
+      - save_cache:
+          paths: vendor/bundle
+          key: gems-{{ checksum "Gemfile.lock" }}
+
       - run: bundle exec danger
