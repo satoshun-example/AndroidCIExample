@@ -29,13 +29,20 @@ jobs:
       - store_test_results:
           path: app/build/test-results
 
-      - run: gem update --system 2.4.8
-      - run: gem install bundler
+      - run:
+          command: gem update --system 2.4.8
+          when: always
+      - run:
+          command: gem install bundler
+          when: always
       - restore_cache:
           key: gems-{{ checksum "Gemfile.lock" }}
-      - run: bundle install --path vendor/bundle
+      - run:
+          command: bundle install --path vendor/bundle
+          when: always
       - save_cache:
           paths: vendor/bundle
           key: gems-{{ checksum "Gemfile.lock" }}
-
-      - run: bundle exec danger
+      - run:
+          command: bundle exec danger
+          when: always
